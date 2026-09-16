@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<ruleset name="EnderecoPlentyOneClient">
+    <description>PSR-12 for the plugin's own code.</description>
+
+    <file>src</file>
+    <file>resources/lib</file>
+
+    <arg name="basepath" value="."/>
+    <arg name="colors"/>
+    <arg value="p"/>
+
+    <rule ref="PSR12"/>
+</ruleset>

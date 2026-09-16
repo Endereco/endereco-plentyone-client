@@ -1,0 +1,15 @@
+{
+    "name"              :   "EnderecoPlentyOneClient",
+    "namespace"         :   "EnderecoPlentyOneClient",
+    "type"              :   "integration",
+    "version"           :   "0.1.1",
+    "pluginIcon"        :   "icon_plugin_xs.png",
+    "description"       :   "Internationale Adressprüfung by endereco",
+    "author"            :   "Stefan Hanke",
+    "authorIcon"        :   "icon_author_xs.png",
+    "serviceProvider"   :   "EnderecoPlentyOneClient\\Providers\\EnderecoPlentyOneClientServiceProvider",
+    "runOnBuild"        :   [
+        "EnderecoPlentyOneClient\\Migrations\\CreateQueueTable20260911",
+        "EnderecoPlentyOneClient\\Migrations\\CreateEnderecoPropertyTypes20260902"
+    ]
+}

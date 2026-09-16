@@ -1,0 +1,13 @@
+{
+  "typeId": 1,
+  "plentyId": 12345,
+  "statusId": 2,
+  "relations": [
+    {"referenceType": "contact", "referenceId": 147, "relation": "receiver"}
+  ],
+  "orderItems": [
+    {"typeId": 1, "itemVariationId": 1004, "quantity": 1,
+     "countryVatId": 1, "vatField": 0,
+     "amounts": [{"priceOriginalGross": 119.0}]}
+  ]
+}

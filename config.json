@@ -1,0 +1,194 @@
+{
+    "formatVersion": 1,
+    "menu": {
+        "api": {
+            "label": "Config.apiTab",
+            "formFields": {
+                "api.endpoint": {
+                    "type": "inputText",
+                    "required": true,
+                    "label": "Config.apiEndpointLabel",
+                    "options": {
+                        "tooltip": "Config.apiEndpointTooltip",
+                        "defaultValue": "https://endereco-service.de/rpc/v1"
+                    }
+                },
+                "api.key": {
+                    "type": "inputText",
+                    "required": true,
+                    "label": "Config.apiKeyLabel",
+                    "options": {
+                        "tooltip": "Config.apiKeyTooltip",
+                        "isPassword": false,
+                        "defaultValue": ""
+                    }
+                },
+                "api.maxAttempts": {
+                    "type": "selectBox",
+                    "required": false,
+                    "label": "Config.maxAttemptsLabel",
+                    "options": {
+                        "tooltip": "Config.maxAttemptsTooltip",
+                        "defaultValue": "3",
+                        "selectBoxValues": [
+                            {
+                                "value": "3",
+                                "caption": "Config.maxAttemptsThree"
+                            },
+                            {
+                                "value": "6",
+                                "caption": "Config.maxAttemptsSix"
+                            },
+                            {
+                                "value": "12",
+                                "caption": "Config.maxAttemptsTwelve"
+                            }
+                        ]
+                    }
+                }
+            }
+        },
+        "queue": {
+            "label": "Config.queueTab",
+            "formFields": {
+                "queue.processingMode": {
+                    "type": "selectBox",
+                    "required": false,
+                    "label": "Config.processingModeLabel",
+                    "options": {
+                        "tooltip": "Config.processingModeTooltip",
+                        "defaultValue": "running",
+                        "selectBoxValues": [
+                            {
+                                "value": "running",
+                                "caption": "Config.processingModeRunning"
+                            },
+                            {
+                                "value": "draining",
+                                "caption": "Config.processingModeDraining"
+                            },
+                            {
+                                "value": "stopped",
+                                "caption": "Config.processingModeStopped"
+                            }
+                        ]
+                    }
+                },
+                "queue.enqueueMode": {
+                    "type": "selectBox",
+                    "required": false,
+                    "label": "Config.enqueueModeLabel",
+                    "options": {
+                        "tooltip": "Config.enqueueModeTooltip",
+                        "defaultValue": "automatic",
+                        "selectBoxValues": [
+                            {
+                                "value": "automatic",
+                                "caption": "Config.enqueueModeAutomatic"
+                            },
+                            {
+                                "value": "manual",
+                                "caption": "Config.enqueueModeManual"
+                            }
+                        ]
+                    }
+                },
+                "validation.commentUserId": {
+                    "type": "inputNumber",
+                    "required": false,
+                    "label": "Config.commentUserIdLabel",
+                    "options": {
+                        "tooltip": "Config.commentUserIdTooltip",
+                        "defaultValue": "1"
+                    }
+                },
+                "validation.applyCorrection": {
+                    "type": "checkBox",
+                    "required": false,
+                    "label": "Config.applyCorrectionLabel",
+                    "options": {
+                        "tooltip": "Config.applyCorrectionTooltip",
+                        "defaultValue": "true"
+                    }
+                },
+                "validation.writeComments": {
+                    "type": "checkBox",
+                    "required": false,
+                    "label": "Config.writeCommentsLabel",
+                    "options": {
+                        "tooltip": "Config.writeCommentsTooltip",
+                        "defaultValue": "true"
+                    }
+                }
+            }
+        },
+        "status": {
+            "label": "Config.statusTab",
+            "formFields": {
+                "status.startStatus": {
+                    "type": "inputText",
+                    "required": false,
+                    "label": "Config.startStatusLabel",
+                    "options": {
+                        "tooltip": "Config.startStatusTooltip",
+                        "defaultValue": "3.2"
+                    }
+                },
+                "status.targetCorrect": {
+                    "type": "inputText",
+                    "required": false,
+                    "label": "Config.targetCorrectLabel",
+                    "options": {
+                        "tooltip": "Config.targetCorrectTooltip",
+                        "defaultValue": "0"
+                    }
+                },
+                "status.targetMinorCorrection": {
+                    "type": "inputText",
+                    "required": false,
+                    "label": "Config.targetMinorCorrectionLabel",
+                    "options": {
+                        "tooltip": "Config.targetMinorCorrectionTooltip",
+                        "defaultValue": "0"
+                    }
+                },
+                "status.targetSuggestionAvailable": {
+                    "type": "inputText",
+                    "required": false,
+                    "label": "Config.targetSuggestionAvailableLabel",
+                    "options": {
+                        "tooltip": "Config.targetSuggestionAvailableTooltip",
+                        "defaultValue": "3.2"
+                    }
+                },
+                "status.targetMultipleVariants": {
+                    "type": "inputText",
+                    "required": false,
+                    "label": "Config.targetMultipleVariantsLabel",
+                    "options": {
+                        "tooltip": "Config.targetMultipleVariantsTooltip",
+                        "defaultValue": "3.2"
+                    }
+                },
+                "status.targetNotFound": {
+                    "type": "inputText",
+                    "required": false,
+                    "label": "Config.targetNotFoundLabel",
+                    "options": {
+                        "tooltip": "Config.targetNotFoundTooltip",
+                        "defaultValue": "3.2"
+                    }
+                },
+                "status.targetGaveUp": {
+                    "type": "inputText",
+                    "required": false,
+                    "label": "Config.targetGaveUpLabel",
+                    "options": {
+                        "tooltip": "Config.targetGaveUpTooltip",
+                        "defaultValue": "3.2"
+                    }
+                }
+            }
+        }
+    }
+}
