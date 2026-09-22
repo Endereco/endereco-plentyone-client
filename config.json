@@ -158,7 +158,7 @@
                     "label": "Config.targetSuggestionAvailableLabel",
                     "options": {
                         "tooltip": "Config.targetSuggestionAvailableTooltip",
-                        "defaultValue": "3.2"
+                        "defaultValue": "0"
                     }
                 },
                 "status.targetMultipleVariants": {
@@ -167,7 +167,7 @@
                     "label": "Config.targetMultipleVariantsLabel",
                     "options": {
                         "tooltip": "Config.targetMultipleVariantsTooltip",
-                        "defaultValue": "3.2"
+                        "defaultValue": "0"
                     }
                 },
                 "status.targetNotFound": {
@@ -176,7 +176,7 @@
                     "label": "Config.targetNotFoundLabel",
                     "options": {
                         "tooltip": "Config.targetNotFoundTooltip",
-                        "defaultValue": "3.2"
+                        "defaultValue": "0"
                     }
                 },
                 "status.targetGaveUp": {
@@ -185,7 +185,7 @@
                     "label": "Config.targetGaveUpLabel",
                     "options": {
                         "tooltip": "Config.targetGaveUpTooltip",
-                        "defaultValue": "3.2"
+                        "defaultValue": "0"
                     }
                 }
             }
