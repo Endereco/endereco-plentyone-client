@@ -32,11 +32,4 @@ final class CommentKey
     public const BUILDING_NUMBER_MISSING = 'comment.buildingNumberMissing';
 
     public const BUILDING_NUMBER_NOT_FOUND = 'comment.buildingNumberNotFound';
-
-    /**
-     * :type - "Packstation" or "Postfiliale". Names both numbers a
-     * Packstation/Postfiliale address has: its own location number, and
-     * the customer's personal number.
-     */
-    public const POST_NUMBER_ISSUE = 'comment.postNumberIssue';
 }
