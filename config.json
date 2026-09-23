@@ -22,29 +22,6 @@
                         "isPassword": false,
                         "defaultValue": ""
                     }
-                },
-                "api.maxAttempts": {
-                    "type": "selectBox",
-                    "required": false,
-                    "label": "Config.maxAttemptsLabel",
-                    "options": {
-                        "tooltip": "Config.maxAttemptsTooltip",
-                        "defaultValue": "3",
-                        "selectBoxValues": [
-                            {
-                                "value": "3",
-                                "caption": "Config.maxAttemptsThree"
-                            },
-                            {
-                                "value": "6",
-                                "caption": "Config.maxAttemptsSix"
-                            },
-                            {
-                                "value": "12",
-                                "caption": "Config.maxAttemptsTwelve"
-                            }
-                        ]
-                    }
                 }
             }
         },

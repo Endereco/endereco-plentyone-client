@@ -7,6 +7,7 @@ namespace EnderecoPlentyOneClient\Services;
 use EnderecoPlentyOneClient\Dtos\AddressDto;
 use EnderecoPlentyOneClient\Dtos\CheckResult;
 use EnderecoPlentyOneClient\Dtos\CheckSession;
+use EnderecoPlentyOneClient\Enums\AttemptLimit;
 use EnderecoPlentyOneClient\Enums\LogCode;
 use EnderecoPlentyOneClient\Enums\OrderPropertyName;
 use EnderecoPlentyOneClient\Enums\ProcessState;
@@ -29,7 +30,6 @@ final class OrderCheckService
         private AttemptCounter $attempts,
         private CheckResultWriter $results,
         private QueueRowRelease $rowRelease,
-        private PluginSettings $settings,
         private PluginLogger $logger,
     ) {
     }
@@ -59,7 +59,7 @@ final class OrderCheckService
     }
 
     /**
-     * The circuit breaker: past the configured limit, gives up via
+     * The circuit breaker: past AttemptLimit::MAX_ATTEMPTS, gives up via
      * CheckResultWriter::giveUp() instead of retrying.
      */
     private function recordFailedAttempt(
@@ -76,17 +76,15 @@ final class OrderCheckService
             return;
         }
 
-        $maxAttempts = $this->settings->maxAttempts();
-
         $this->properties->write($orderId, [
             OrderPropertyName::ATTEMPTS_COUNT => $attempts,
         ]);
 
-        if ((int) $attempts >= $maxAttempts) {
+        if ((int) $attempts >= AttemptLimit::MAX_ATTEMPTS) {
             $this->logger->exception(
                 LogCode::ORDER_GAVE_UP,
                 $exception,
-                ['attempts' => $attempts, 'maxAttempts' => $maxAttempts],
+                ['attempts' => $attempts, 'maxAttempts' => AttemptLimit::MAX_ATTEMPTS],
                 $orderId
             );
 
@@ -98,7 +96,7 @@ final class OrderCheckService
         $this->logger->exception(
             LogCode::API_CALL_FAILED,
             $exception,
-            ['attempts' => $attempts, 'maxAttempts' => $maxAttempts],
+            ['attempts' => $attempts, 'maxAttempts' => AttemptLimit::MAX_ATTEMPTS],
             $orderId
         );
     }

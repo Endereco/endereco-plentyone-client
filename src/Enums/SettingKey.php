@@ -55,6 +55,4 @@ final class SettingKey
     public const TARGET_STATUS_NOT_FOUND = 'status.targetNotFound';
 
     public const TARGET_STATUS_GAVE_UP = 'status.targetGaveUp';
-
-    public const MAX_ATTEMPTS = 'api.maxAttempts';
 }

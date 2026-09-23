@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace EnderecoPlentyOneClient\Services;
 
-use EnderecoPlentyOneClient\Enums\AttemptLimit;
 use EnderecoPlentyOneClient\Enums\EnderecoRpc;
 use EnderecoPlentyOneClient\Enums\EnqueueMode;
 use EnderecoPlentyOneClient\Enums\OrderStatus;
@@ -132,18 +131,6 @@ final class PluginSettings
         $value = (float) $this->text($key, '0');
 
         return $value === 0.0 ? null : $value;
-    }
-
-    /** Attempts the circuit breaker allows before giving up; falls back to AttemptLimit::DEFAULT when unset. */
-    public function maxAttempts(): int
-    {
-        $value = $this->text(SettingKey::MAX_ATTEMPTS, AttemptLimit::DEFAULT);
-
-        if (in_array($value, AttemptLimit::ALL, true)) {
-            return (int) $value;
-        }
-
-        return (int) AttemptLimit::DEFAULT;
     }
 
     /** Empty when the merchant has not entered a key yet. */
