@@ -123,8 +123,8 @@ final class PluginSettings
         $key = match ($case) {
             TargetStatusCase::CORRECT => SettingKey::TARGET_STATUS_CORRECT,
             TargetStatusCase::MINOR_CORRECTION => SettingKey::TARGET_STATUS_MINOR_CORRECTION,
-            TargetStatusCase::SUGGESTION_AVAILABLE => SettingKey::TARGET_STATUS_SUGGESTION_AVAILABLE,
-            TargetStatusCase::MULTIPLE_VARIANTS => SettingKey::TARGET_STATUS_MULTIPLE_VARIANTS,
+            TargetStatusCase::SUGGESTION_AVAILABLE,
+            TargetStatusCase::MULTIPLE_VARIANTS => SettingKey::TARGET_STATUS_SUGGESTION_AVAILABLE,
             TargetStatusCase::NOT_FOUND => SettingKey::TARGET_STATUS_NOT_FOUND,
             TargetStatusCase::GAVE_UP => SettingKey::TARGET_STATUS_GAVE_UP,
         };

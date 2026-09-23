@@ -41,17 +41,16 @@ final class SettingKey
     public const START_STATUS = 'status.startStatus';
 
     /**
-     * One target-status setting per TargetStatusCase. "0" - also the
-     * fallback for an unset value - means: restore the status the order
-     * had before it was queued.
+     * One target-status setting per TargetStatusCase, except SUGGESTION_AVAILABLE
+     * and MULTIPLE_VARIANTS, which share this one. "0" - also the fallback for
+     * an unset value - means: restore the status the order had before it was
+     * queued.
      */
     public const TARGET_STATUS_CORRECT = 'status.targetCorrect';
 
     public const TARGET_STATUS_MINOR_CORRECTION = 'status.targetMinorCorrection';
 
     public const TARGET_STATUS_SUGGESTION_AVAILABLE = 'status.targetSuggestionAvailable';
-
-    public const TARGET_STATUS_MULTIPLE_VARIANTS = 'status.targetMultipleVariants';
 
     public const TARGET_STATUS_NOT_FOUND = 'status.targetNotFound';
 

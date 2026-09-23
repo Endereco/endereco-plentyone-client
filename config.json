@@ -161,15 +161,6 @@
                         "defaultValue": "0"
                     }
                 },
-                "status.targetMultipleVariants": {
-                    "type": "inputText",
-                    "required": false,
-                    "label": "Config.targetMultipleVariantsLabel",
-                    "options": {
-                        "tooltip": "Config.targetMultipleVariantsTooltip",
-                        "defaultValue": "0"
-                    }
-                },
                 "status.targetNotFound": {
                     "type": "inputText",
                     "required": false,
