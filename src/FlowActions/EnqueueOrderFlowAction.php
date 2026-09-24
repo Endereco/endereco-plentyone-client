@@ -7,30 +7,27 @@ namespace EnderecoPlentyOneClient\FlowActions;
 use EnderecoPlentyOneClient\Enums\Procedure;
 use EnderecoPlentyOneClient\Services\EnqueueOrderFromFlow;
 use EnderecoPlentyOneClient\Services\PluginTranslator;
-use Plenty\Modules\Flow\DataModels\ConfigForm\FormField;
 use Plenty\Modules\Flow\Models\Filter;
-use Plenty\Modules\Flow\Models\Input;
 use Plenty\Modules\Flow\Models\Output;
 use Plenty\Modules\Flow\StepActions\Definitions\Models\Plugin\PluginFlowStepActionDefinition;
 
 /**
  * The flow action "queue order for address validation" - modern
- * registration via PluginFlowRegistrationService, not yet confirmed
- * available on this platform (see ServiceProvider); kept ready for when it
- * is.
+ * registration via PluginFlowRegistrationService (see ServiceProvider).
+ * Shaped after the ChangeOrderStatusAction example of the plentyFlow
+ * documentation, the only reference for the abstract class - there are no
+ * interface stubs for it.
  *
  * Deliberately thin: adapts the modern Input/Output shape to a plain order
- * id and hands off to EnqueueOrderFromFlow, shared with EnqueueOrderProcedure
- * so a switch to the modern API needs no logic change.
+ * id and hands off to EnqueueOrderFromFlow, shared with EnqueueOrderProcedure.
+ *
+ * No constructor and no own properties: the parent already declares a
+ * protected $translator, and a conflicting declaration is a fatal error at
+ * class load - which boot() hits on every request, taking the whole system
+ * down (measured 2026-09-24). Dependencies are resolved where they are needed.
  */
 final class EnqueueOrderFlowAction extends PluginFlowStepActionDefinition
 {
-    public function __construct(
-        private EnqueueOrderFromFlow $handler,
-        private PluginTranslator $translator,
-    ) {
-    }
-
     public function getIdentifier(): string
     {
         return Procedure::ENQUEUE_ORDER_ID;
@@ -38,18 +35,23 @@ final class EnqueueOrderFlowAction extends PluginFlowStepActionDefinition
 
     public function getName(): string
     {
-        return $this->translator->trans(Procedure::ENQUEUE_ORDER);
+        return $this->translator()->trans(Procedure::ENQUEUE_ORDER);
     }
 
     public function getDescription(): string
     {
-        return $this->translator->trans(Procedure::ENQUEUE_ORDER_HELP);
+        return $this->translator()->trans(Procedure::ENQUEUE_ORDER_HELP);
+    }
+
+    public function getTooltip(): string
+    {
+        return $this->translator()->trans(Procedure::ENQUEUE_ORDER_HELP);
     }
 
     /** Shown to the AI assistant that builds flows from a description. */
     public function getAIDescription(): string
     {
-        return $this->translator->trans(Procedure::ENQUEUE_ORDER_HELP);
+        return $this->translator()->trans(Procedure::ENQUEUE_ORDER_HELP);
     }
 
     public function getPluginName(): string
@@ -77,11 +79,9 @@ final class EnqueueOrderFlowAction extends PluginFlowStepActionDefinition
      * Queues every order the flow handed in and passes it on unchanged, so
      * a following step still works on the same orders.
      *
-     * @param list<Input>                              $inputs
-     * @param array<string, bool|float|int|string|null> $configFields
-     * @param array<string, bool|float|int|string|null> $extraParams
-     *
-     * @return list<Output>
+     * $inputs is keyed by object type; for plugin actions that is always the
+     * order type (getObjectType()), each entry an Input carrying the order id
+     * as its value.
      */
     public function performTask(
         array $inputs,
@@ -89,19 +89,27 @@ final class EnqueueOrderFlowAction extends PluginFlowStepActionDefinition
         ?Filter $filter = null,
         array $extraParams = []
     ): array {
+        $handler = pluginApp(EnqueueOrderFromFlow::class);
+        $objectType = $this->getObjectType();
+
         $outputs = [];
+        foreach ($inputs[$objectType] ?? [] as $input) {
+            $orderId = (int) $input->value;
 
-        foreach ($inputs as $input) {
-            if ($input->type === Procedure::OBJECT_ORDER) {
-                $this->handler->handle($input->value);
-            }
+            // Logs its own failures and never throws - see EnqueueOrderFromFlow.
+            $handler->handle($orderId);
 
-            $output = pluginApp(Output::class);
-            $output->type = $input->type;
-            $output->value = $input->value;
-            $outputs[] = $output;
+            $outputs[] = pluginApp(Output::class, [
+                'name' => $objectType,
+                'value' => (string) $orderId,
+            ]);
         }
 
         return $outputs;
+    }
+
+    private function translator(): PluginTranslator
+    {
+        return pluginApp(PluginTranslator::class);
     }
 }

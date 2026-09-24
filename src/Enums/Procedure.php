@@ -25,9 +25,6 @@ final class Procedure
 
     public const ENQUEUE_ORDER_HELP = 'procedure.enqueueOrderHelp';
 
-    /** Object type the action works on. */
-    public const OBJECT_ORDER = 'order';
-
     /** Material icon shown next to the action in the palette. */
     public const ICON = 'location_on';
 }

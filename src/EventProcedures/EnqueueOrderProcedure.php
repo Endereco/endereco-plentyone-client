@@ -9,8 +9,8 @@ use Plenty\Modules\EventProcedures\Events\EventProceduresTriggered;
 
 /**
  * The flow action "queue order for address validation" - legacy
- * registration via EventProceduresService, the only mechanism confirmed to
- * work on this platform (see ServiceProvider).
+ * registration via EventProceduresService, the fallback when the modern
+ * plentyFlow registration is not available (see ServiceProvider).
  *
  * Deliberately thin: adapts EventProceduresTriggered to a plain order id
  * and hands off to EnqueueOrderFromFlow, shared with EnqueueOrderFlowAction

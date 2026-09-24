@@ -18,7 +18,7 @@ use Plenty\Log\Services\ReferenceContainer;
 use Plenty\Modules\Cron\Services\CronContainer;
 use Plenty\Modules\EventProcedures\Services\Entries\ProcedureEntry;
 use Plenty\Modules\EventProcedures\Services\EventProceduresService;
-use Plenty\Modules\Flow\Contracts\PluginFlowRegistrationService;
+use Plenty\Modules\Flow\Services\PluginFlowRegistrationService;
 use Plenty\Modules\Order\Events\OrderCreated;
 use Plenty\Plugin\Events\Dispatcher;
 use Plenty\Plugin\ServiceProvider;
@@ -48,6 +48,12 @@ class EnderecoPlentyOneClientServiceProvider extends ServiceProvider
     /**
      * Registers plentyFlow's "queue order" action if the platform has it,
      * otherwise the legacy EventProcedures mechanism - never both.
+     *
+     * The flow documentation never names PluginFlowRegistrationService's
+     * namespace. It lives in Flow\Services; Flow\Contracts, used here before,
+     * does not exist ("class ... not found"), which made every boot fall back
+     * to the legacy registration without a trace (measured 2026-09-24 on
+     * system *****).
      */
     private function registerFlowIntegration(): void
     {
