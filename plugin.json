@@ -1,12 +1,25 @@
 {
     "name"              :   "EnderecoPlentyOneClient",
+    "marketplaceName"   :   {
+        "de": "Adressprüfung für Aufträge",
+        "en": "Address validation for orders"
+    },
     "namespace"         :   "EnderecoPlentyOneClient",
     "type"              :   "integration",
-    "version"           :   "0.1.1",
+    "version"           :   "1.0.0",
     "pluginIcon"        :   "icon_plugin_xs.png",
-    "description"       :   "Internationale Adressprüfung by endereco",
-    "author"            :   "Stefan Hanke",
+    "shortDescription"  :   {
+        "de": "Internationale Adressprüfung für Auftragsadressen",
+        "en": "International address validation for order addresses"
+    },
+    "author"            :   "endereco UG (haftungsbeschränkt)",
     "authorIcon"        :   "icon_author_xs.png",
+    "license"           :   "AGPL-3.0-or-later",
+    "keywords"          :   [
+        "address",
+        "validation",
+        "endereco"
+    ],
     "serviceProvider"   :   "EnderecoPlentyOneClient\\Providers\\EnderecoPlentyOneClientServiceProvider",
     "runOnBuild"        :   [
         "EnderecoPlentyOneClient\\Migrations\\CreateQueueTable20260911",
