@@ -111,7 +111,6 @@ final class AddressDto
             AddressField::ADDRESS4 => $this->address4,
             AddressField::POSTAL_CODE => $this->postalCode,
             AddressField::TOWN => $this->town,
-            AddressField::COUNTRY_ID => $this->countryId,
         ];
 
         if ($this->stateId !== null) {
