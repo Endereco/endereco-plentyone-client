@@ -63,13 +63,6 @@ final class EnderecoRpc
 
     public const FIELD_ADDITIONAL_INFO = 'additionalInfo';
 
-    /**
-     * The plugin's own separator for joining two values into one
-     * additionalInfo field and splitting the answer back apart. Not part
-     * of Endereco's protocol.
-     */
-    public const ADDITIONAL_INFO_SEPARATOR = '|||';
-
     /** ISO 3166-2, e.g. "DE-BY". */
     public const FIELD_SUBDIVISION_CODE = 'subdivisionCode';
 

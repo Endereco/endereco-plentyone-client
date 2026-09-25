@@ -78,7 +78,6 @@ final class AddressDto
         string $address1,
         string $address2,
         string $address3,
-        string $address4,
         string $postalCode,
         string $town,
         ?int $stateId
@@ -87,7 +86,7 @@ final class AddressDto
             $address1,
             $address2,
             $address3,
-            $address4,
+            $this->address4,
             $postalCode,
             $town,
             $this->countryId,
@@ -96,9 +95,10 @@ final class AddressDto
     }
 
     /**
-     * The field set for updateOrderAddress(). stateId is only included
-     * when set, consistent with SubdivisionResolver treating it as
-     * optional throughout the check.
+     * The field set for updateOrderAddress() - strictly only fields a
+     * correction can actually contain. stateId is only included when set,
+     * consistent with SubdivisionResolver treating it as optional throughout
+     * the check.
      *
      * @return array<string, int|string|null>
      */
@@ -108,7 +108,6 @@ final class AddressDto
             AddressField::ADDRESS1 => $this->address1,
             AddressField::ADDRESS2 => $this->address2,
             AddressField::ADDRESS3 => $this->address3,
-            AddressField::ADDRESS4 => $this->address4,
             AddressField::POSTAL_CODE => $this->postalCode,
             AddressField::TOWN => $this->town,
         ];

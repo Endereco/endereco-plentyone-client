@@ -10,9 +10,8 @@ use EnderecoPlentyOneClient\Enums\EnderecoRpc;
 /**
  * Puts a suggestion of the service back into a PlentyONE address.
  *
- * Six fields can differ - see AddressDto::withCorrection(). Country stays
- * as the customer entered it. additionalInfo is split back apart from
- * EnderecoRpc::ADDITIONAL_INFO_SEPARATOR - see EnderecoRequestBuilder.
+ * Six fields can differ - see AddressDto::withCorrection(). Country and
+ * address4 stay exactly as the customer entered them.
  */
 final class EnderecoPredictionMapper
 {
@@ -26,13 +25,10 @@ final class EnderecoPredictionMapper
         AddressDto $original,
         array $prediction
     ): AddressDto {
-        [$address3, $address4] = $this->additionalInfo($prediction);
-
         return $original->withCorrection(
             $this->field($prediction, EnderecoRpc::FIELD_STREET),
             $this->field($prediction, EnderecoRpc::FIELD_HOUSE_NUMBER),
-            $address3,
-            $address4,
+            $this->additionalInfo($prediction),
             $this->field($prediction, EnderecoRpc::FIELD_POST_CODE),
             $this->field($prediction, EnderecoRpc::FIELD_CITY_NAME),
             $this->state($original, $prediction),
@@ -70,17 +66,10 @@ final class EnderecoPredictionMapper
         return $this->field($prediction, EnderecoRpc::FIELD_STREET) !== $original->address1();
     }
 
-    /**
-     * @param array<string, string> $prediction
-     *
-     * @return array{0: string, 1: string} address3, address4
-     */
-    private function additionalInfo(array $prediction): array
+    /** @param array<string, string> $prediction */
+    private function additionalInfo(array $prediction): string
     {
-        $value = $this->field($prediction, EnderecoRpc::FIELD_ADDITIONAL_INFO);
-        $parts = explode(EnderecoRpc::ADDITIONAL_INFO_SEPARATOR, $value, 2);
-
-        return [$parts[0], $parts[1] ?? ''];
+        return $this->field($prediction, EnderecoRpc::FIELD_ADDITIONAL_INFO);
     }
 
     /**

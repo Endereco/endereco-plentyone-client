@@ -142,8 +142,7 @@ final class OrderCommentWriter
                 $suggestion->address2(),
                 $suggestion->postalCode(),
                 $suggestion->town(),
-                $suggestion->address3(),
-                $suggestion->address4()
+                $suggestion->address3()
             ));
         } elseif ($predictions !== []) {
             // Several candidates: suggestion() is null, list some instead.
@@ -182,34 +181,20 @@ final class OrderCommentWriter
      */
     private function format(array $prediction): array
     {
-        $additionalInfo = $prediction[EnderecoRpc::FIELD_ADDITIONAL_INFO] ?? '';
-        [$address3, $address4] = $this->splitAdditionalInfo($additionalInfo);
-
         return $this->addressLines(
             $prediction[EnderecoRpc::FIELD_STREET] ?? '',
             $prediction[EnderecoRpc::FIELD_HOUSE_NUMBER] ?? '',
             $prediction[EnderecoRpc::FIELD_POST_CODE] ?? '',
             $prediction[EnderecoRpc::FIELD_CITY_NAME] ?? '',
-            $address3,
-            $address4
+            $prediction[EnderecoRpc::FIELD_ADDITIONAL_INFO] ?? ''
         );
     }
 
     /**
-     * Same split as EnderecoPredictionMapper, so both places show it the same way.
-     *
-     * @return array{0: string, 1: string}
-     */
-    private function splitAdditionalInfo(string $value): array
-    {
-        $parts = explode(EnderecoRpc::ADDITIONAL_INFO_SEPARATOR, $value, 2);
-
-        return [$parts[0], $parts[1] ?? ''];
-    }
-
-    /**
-     * Street+number on one line, postcode+town on the next, address3 and
-     * address4 each on their own line and only when not empty.
+     * Street+number on one line, postcode+town on the next, address3 on its
+     * own line and only when not empty. address4 is deliberately never
+     * shown here - a comment only lists what a check could ever correct,
+     * and address4 never is.
      *
      * @return list<string>
      */
@@ -218,8 +203,7 @@ final class OrderCommentWriter
         string $address2,
         string $postalCode,
         string $town,
-        string $address3,
-        string $address4
+        string $address3
     ): array {
         $lines = [
             trim($address1 . ' ' . $address2),
@@ -228,10 +212,6 @@ final class OrderCommentWriter
 
         if ($address3 !== '') {
             $lines[] = $address3;
-        }
-
-        if ($address4 !== '') {
-            $lines[] = $address4;
         }
 
         return $lines;

@@ -59,30 +59,14 @@ final class EnderecoRequestBuilder
     }
 
     /**
-     * address3/address4 (PlentyONE's additional-info fields), folded into
-     * one. Always sent, empty or not.
-     *
-     * Joined with EnderecoRpc::ADDITIONAL_INFO_SEPARATOR, not a plain space,
-     * so EnderecoPredictionMapper can split address3/address4 back apart when
-     * writing a correction.
+     * address3 (PlentyONE's additional-info field). Always sent, empty or
+     * not - address4 is never part of the check, see AddressDto.
      *
      * @return array<string, string>
      */
     private function additionalInfo(AddressDto $address): array
     {
-        $address3 = $this->replaceSeparator($address->address3());
-        $address4 = $this->replaceSeparator($address->address4());
-
-        $value = $address3 === '' || $address4 === ''
-            ? $address3 . $address4
-            : $address3 . EnderecoRpc::ADDITIONAL_INFO_SEPARATOR . $address4;
-
-        return [EnderecoRpc::FIELD_ADDITIONAL_INFO => $value];
-    }
-
-    private function replaceSeparator(string $value): string
-    {
-        return str_replace(EnderecoRpc::ADDITIONAL_INFO_SEPARATOR, ' ', $value);
+        return [EnderecoRpc::FIELD_ADDITIONAL_INFO => $address->address3()];
     }
 
     /**
