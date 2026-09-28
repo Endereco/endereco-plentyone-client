@@ -146,15 +146,6 @@
                         "tooltip": "Config.targetNotFoundTooltip",
                         "defaultValue": "0"
                     }
-                },
-                "status.targetGaveUp": {
-                    "type": "inputText",
-                    "required": false,
-                    "label": "Config.targetGaveUpLabel",
-                    "options": {
-                        "tooltip": "Config.targetGaveUpTooltip",
-                        "defaultValue": "0"
-                    }
                 }
             }
         }

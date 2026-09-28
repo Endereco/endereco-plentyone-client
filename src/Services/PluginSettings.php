@@ -116,16 +116,21 @@ final class PluginSettings
      * "0" (also the fallback for empty/unparseable) - meaning: restore the
      * order's previous status. Existence as a real status is checked in
      * StatusResolver::resolveTarget(), not here.
+     *
+     * GAVE_UP is not configurable - always restores the previous status.
      */
     public function targetStatus(string $case): ?float
     {
+        if ($case === TargetStatusCase::GAVE_UP) {
+            return null;
+        }
+
         $key = match ($case) {
             TargetStatusCase::CORRECT => SettingKey::TARGET_STATUS_CORRECT,
             TargetStatusCase::MINOR_CORRECTION => SettingKey::TARGET_STATUS_MINOR_CORRECTION,
             TargetStatusCase::SUGGESTION_AVAILABLE,
             TargetStatusCase::MULTIPLE_VARIANTS => SettingKey::TARGET_STATUS_SUGGESTION_AVAILABLE,
             TargetStatusCase::NOT_FOUND => SettingKey::TARGET_STATUS_NOT_FOUND,
-            TargetStatusCase::GAVE_UP => SettingKey::TARGET_STATUS_GAVE_UP,
         };
 
         $value = (float) $this->text($key, '0');

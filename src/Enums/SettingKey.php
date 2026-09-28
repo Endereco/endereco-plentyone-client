@@ -53,6 +53,4 @@ final class SettingKey
     public const TARGET_STATUS_SUGGESTION_AVAILABLE = 'status.targetSuggestionAvailable';
 
     public const TARGET_STATUS_NOT_FOUND = 'status.targetNotFound';
-
-    public const TARGET_STATUS_GAVE_UP = 'status.targetGaveUp';
 }
