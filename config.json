@@ -70,15 +70,6 @@
                         ]
                     }
                 },
-                "validation.commentUserId": {
-                    "type": "inputNumber",
-                    "required": false,
-                    "label": "Config.commentUserIdLabel",
-                    "options": {
-                        "tooltip": "Config.commentUserIdTooltip",
-                        "defaultValue": "1"
-                    }
-                },
                 "validation.applyCorrection": {
                     "type": "checkBox",
                     "required": false,
@@ -95,6 +86,15 @@
                     "options": {
                         "tooltip": "Config.writeCommentsTooltip",
                         "defaultValue": "true"
+                    }
+                },
+                "validation.commentUserId": {
+                    "type": "inputNumber",
+                    "required": false,
+                    "label": "Config.commentUserIdLabel",
+                    "options": {
+                        "tooltip": "Config.commentUserIdTooltip",
+                        "defaultValue": "1"
                     }
                 }
             }
