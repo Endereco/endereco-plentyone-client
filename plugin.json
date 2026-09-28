@@ -1,8 +1,8 @@
 {
     "name"              :   "EnderecoPlentyOneClient",
     "marketplaceName"   :   {
-        "de": "Adressprüfung für Aufträge",
-        "en": "Address validation for orders"
+        "de": "endereco Adressprüfung",
+        "en": "endereco address validation"
     },
     "namespace"         :   "EnderecoPlentyOneClient",
     "type"              :   "integration",
