@@ -19,7 +19,7 @@
                     "label": "Config.apiKeyLabel",
                     "options": {
                         "tooltip": "Config.apiKeyTooltip",
-                        "isPassword": false,
+                        "isPassword": true,
                         "defaultValue": ""
                     }
                 }
