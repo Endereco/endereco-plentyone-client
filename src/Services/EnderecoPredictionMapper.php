@@ -73,7 +73,8 @@ final class EnderecoPredictionMapper
     }
 
     /**
-     * The state the answer names, or the one the address already had.
+     * The state the answer names, or null when there is none or it doesn't
+     * resolve to a known state.
      *
      * @param array<string, string> $prediction
      */
@@ -84,7 +85,7 @@ final class EnderecoPredictionMapper
         $code = $this->field($prediction, EnderecoRpc::FIELD_SUBDIVISION_CODE);
 
         if ($code === '') {
-            return $original->stateId();
+            return null;
         }
 
         $stateId = $this->subdivisions->isoToPlenty(
@@ -92,7 +93,7 @@ final class EnderecoPredictionMapper
             $code
         );
 
-        return $stateId ?? $original->stateId();
+        return $stateId;
     }
 
     /** @param array<string, string> $prediction */
