@@ -87,15 +87,13 @@ final class PluginSettings
     }
 
     /**
-     * Backend user id for the plugin's own order comments. Falls back to 1
-     * for an empty or non-positive value - see OrderCommentWriter for how a
-     * nonexistent id is caught.
+     * Backend user id for the plugin's own order comments. Empty or
+     * non-positive, both passed through unchanged - see OrderCommentWriter,
+     * which rejects either the same way as a nonexistent id.
      */
     public function commentUserId(): int
     {
-        $userId = (int) $this->text(SettingKey::COMMENT_USER_ID, '1');
-
-        return $userId > 0 ? $userId : 1;
+        return (int) $this->text(SettingKey::COMMENT_USER_ID, '');
     }
 
     /**

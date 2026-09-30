@@ -92,8 +92,17 @@ final class OrderCommentWriter
         return true;
     }
 
+    /**
+     * A non-positive id is rejected outright, before getUserById() ever
+     * sees it - we can't rely on what PlentyONE does with one, now or in
+     * the future.
+     */
     private function userExists(int $userId): bool
     {
+        if ($userId <= 0) {
+            return false;
+        }
+
         try {
             $this->users->getUserById($userId);
 
