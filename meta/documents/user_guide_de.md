@@ -17,6 +17,7 @@ adressierte Sendung später kosten würde.
 ## Funktionsumfang
 
 * Internationale Adressprüfung – nicht nur auf deutsche Adressen beschränkt.
+* Erkennt und prüft auch Packstation- und Postfiliale-Adressen.
 * Automatische Übernahme sicherer, eindeutiger Korrekturen an Straße, Ort,
   Postleitzahl, Zusatzzeile und Bundesland.
 * Der Auftrag wird während der Prüfung angehalten und danach automatisch auf
@@ -339,6 +340,8 @@ Die aktuellen Preise findest du unter [endereco.de/preise](https://www.endereco.
   ändert – dafür gibt es die Flow-Aktion zum erneuten Vormerken.
 * Es verändert niemals die Adresse deines Kunden im CRM, lediglich die
   Lieferadresse am Auftrag.
+* Es prüft aktuell nicht die persönliche Postnummer einer Packstation- oder
+  Postfiliale-Adresse.
 
 ## Support
 

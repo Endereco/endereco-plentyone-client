@@ -17,6 +17,7 @@ otherwise cost later.
 ## Feature overview
 
 * International address validation - not limited to German addresses.
+* Also recognises and checks Packstation and Postfiliale (postal branch) addresses.
 * Automatic write-back of safe, unambiguous corrections to street,
   town, postal code, additional address line, and state.
 * The order is held during the check and afterwards automatically set
@@ -331,6 +332,8 @@ Current prices are listed at [endereco.de/preise](https://www.endereco.de/preise
   afterwards - that's what the re-queueing flow action is for.
 * It never changes your customer's address in the CRM, only the
   delivery address on the order.
+* It currently doesn't check the personal Postnummer (customer number) of a
+  Packstation or Postfiliale address.
 
 ## Support
 
