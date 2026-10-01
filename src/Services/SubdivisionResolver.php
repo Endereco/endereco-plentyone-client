@@ -80,6 +80,43 @@ final class SubdivisionResolver
         return $state->id;
     }
 
+    /** The state's display name for a PlentyONE state id, or '' when it doesn't match. */
+    public function plentyToName(int $countryId, ?int $stateId): string
+    {
+        if ($stateId === null) {
+            return '';
+        }
+
+        foreach ($this->statesOf($countryId) as $state) {
+            if ($state->id === $stateId) {
+                return $state->name;
+            }
+        }
+
+        return '';
+    }
+
+    /** The state's display name for an ISO 3166-2 code, or '' when it doesn't match. */
+    public function isoToName(int $countryId, string $code): string
+    {
+        $shortCode = substr($code, self::PREFIX_LENGTH);
+
+        if ($shortCode === '') {
+            return '';
+        }
+
+        try {
+            $state = $this->countries->getCountryStateByIso(
+                $countryId,
+                $shortCode
+            );
+        } catch (\Throwable) {
+            return '';
+        }
+
+        return $state->name;
+    }
+
     /**
      * Every state PlentyONE has configured for this country - empty when it
      * has none, which is the signal to leave subdivisionCode out entirely.
