@@ -8,7 +8,6 @@ use EnderecoPlentyOneClient\Dtos\AddressDto;
 use EnderecoPlentyOneClient\Dtos\CheckResult;
 use EnderecoPlentyOneClient\Enums\CommentKey;
 use EnderecoPlentyOneClient\Enums\EnderecoRpc;
-use EnderecoPlentyOneClient\Enums\Language;
 use EnderecoPlentyOneClient\Enums\LogCode;
 use EnderecoPlentyOneClient\Enums\TargetStatusCase;
 use Plenty\Modules\Comment\Contracts\CommentRepositoryContract;
@@ -210,7 +209,7 @@ final class OrderCommentWriter
     /** @param array<string, string> $replace */
     private function trans(string $key, array $replace = []): string
     {
-        return $this->translator->trans($key, $replace, Language::GERMAN);
+        return $this->translator->trans($key, $replace);
     }
 
     /**
