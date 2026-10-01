@@ -169,7 +169,8 @@ final class OrderCommentWriter
             array_push($lines, ...$this->addressLines(
                 $this->addressFields($suggestion),
                 $showAddress3,
-                $showSubdivision
+                $showSubdivision,
+                $originalFields
             ));
         } elseif ($predictions !== []) {
             array_push($lines, ...$this->originalAddressLines($originalFields, $showAddress3, $showSubdivision));
@@ -187,7 +188,8 @@ final class OrderCommentWriter
                 array_push($lines, ...$this->addressLines(
                     $this->predictionFields($prediction, $original->countryId()),
                     $showAddress3,
-                    $showSubdivision
+                    $showSubdivision,
+                    $originalFields
                 ));
             }
         } else {
@@ -283,30 +285,52 @@ final class OrderCommentWriter
      * One line per field, "label: value". Street, house number, postal
      * code and town always; address3 and the subdivision name only when
      * shownFields() decided they're worth showing - address4 and country
-     * are never shown, a check never corrects either.
+     * are never shown, a check never corrects either. A field that differs
+     * from $highlightAgainst is marked up as changed - null (the original's
+     * own block) means nothing is ever highlighted.
      *
      * @param array{
      *     address1: string, address2: string, postalCode: string,
      *     town: string, address3: string, subdivisionName: string
      * } $fields
+     * @param array{
+     *     address1: string, address2: string, postalCode: string,
+     *     town: string, address3: string, subdivisionName: string
+     * }|null $highlightAgainst
      * @return list<string>
      */
-    private function addressLines(array $fields, bool $showAddress3, bool $showSubdivision): array
-    {
+    private function addressLines(
+        array $fields,
+        bool $showAddress3,
+        bool $showSubdivision,
+        ?array $highlightAgainst = null
+    ): array {
         $lines = [
-            $this->fieldLine(CommentKey::STREET, $fields['address1']),
-            $this->fieldLine(CommentKey::HOUSE_NUMBER, $fields['address2']),
+            $this->fieldLine(CommentKey::STREET, $fields['address1'], $highlightAgainst['address1'] ?? null),
+            $this->fieldLine(CommentKey::HOUSE_NUMBER, $fields['address2'], $highlightAgainst['address2'] ?? null),
         ];
 
         if ($showAddress3) {
-            $lines[] = $this->fieldLine(CommentKey::ADDITIONAL_INFO, $fields['address3']);
+            $lines[] = $this->fieldLine(
+                CommentKey::ADDITIONAL_INFO,
+                $fields['address3'],
+                $highlightAgainst['address3'] ?? null
+            );
         }
 
-        $lines[] = $this->fieldLine(CommentKey::POSTAL_CODE, $fields['postalCode']);
-        $lines[] = $this->fieldLine(CommentKey::TOWN, $fields['town']);
+        $lines[] = $this->fieldLine(
+            CommentKey::POSTAL_CODE,
+            $fields['postalCode'],
+            $highlightAgainst['postalCode'] ?? null
+        );
+        $lines[] = $this->fieldLine(CommentKey::TOWN, $fields['town'], $highlightAgainst['town'] ?? null);
 
         if ($showSubdivision) {
-            $lines[] = $this->fieldLine(CommentKey::SUBDIVISION, $fields['subdivisionName']);
+            $lines[] = $this->fieldLine(
+                CommentKey::SUBDIVISION,
+                $fields['subdivisionName'],
+                $highlightAgainst['subdivisionName'] ?? null
+            );
         }
 
         return $lines;
@@ -315,10 +339,18 @@ final class OrderCommentWriter
     /**
      * The label translations already carry their own trailing ":" - every
      * field line needs one. An empty value is spelled out, not left blank.
+     *
+     * $originalValue is the original's value for this same field, to
+     * compare against - null skips the comparison entirely, so the
+     * original's own block (compared against itself) is never highlighted.
      */
-    private function fieldLine(string $labelKey, string $value): string
+    private function fieldLine(string $labelKey, string $value, ?string $originalValue = null): string
     {
         $display = $value !== '' ? $value : $this->trans(CommentKey::EMPTY_VALUE);
+
+        if ($originalValue !== null && $value !== $originalValue) {
+            $display = '<b><u>' . $display . '</u></b>';
+        }
 
         return $this->trans($labelKey) . ' ' . $display;
     }
