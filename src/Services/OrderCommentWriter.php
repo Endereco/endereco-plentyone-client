@@ -159,24 +159,20 @@ final class OrderCommentWriter
         $predictions = $result->allPredictions();
 
         [$showAddress3, $showSubdivision] = $this->shownFields($original, $predictions);
+        $originalFields = $this->addressFields($original);
 
         if ($suggestion !== null) {
-            array_push($lines, ...$this->originalAddressLines($original, $showAddress3, $showSubdivision));
+            array_push($lines, ...$this->originalAddressLines($originalFields, $showAddress3, $showSubdivision));
             $lines[] = $this->trans(
                 $case === TargetStatusCase::MINOR_CORRECTION ? CommentKey::CORRECTION : CommentKey::SUGGESTION
             );
             array_push($lines, ...$this->addressLines(
-                $suggestion->address1(),
-                $suggestion->address2(),
-                $suggestion->postalCode(),
-                $suggestion->town(),
-                $suggestion->address3(),
-                $this->subdivisions->plentyToName($suggestion->countryId(), $suggestion->stateId()),
+                $this->addressFields($suggestion),
                 $showAddress3,
                 $showSubdivision
             ));
         } elseif ($predictions !== []) {
-            array_push($lines, ...$this->originalAddressLines($original, $showAddress3, $showSubdivision));
+            array_push($lines, ...$this->originalAddressLines($originalFields, $showAddress3, $showSubdivision));
 
             // Several candidates: suggestion() is null, list some instead.
             foreach (array_slice($predictions, 0, self::MAX_LISTED_PREDICTIONS) as $index => $prediction) {
@@ -189,15 +185,7 @@ final class OrderCommentWriter
                     ['number' => (string) ($index + 1)]
                 );
                 array_push($lines, ...$this->addressLines(
-                    $prediction[EnderecoRpc::FIELD_STREET] ?? '',
-                    $prediction[EnderecoRpc::FIELD_HOUSE_NUMBER] ?? '',
-                    $prediction[EnderecoRpc::FIELD_POST_CODE] ?? '',
-                    $prediction[EnderecoRpc::FIELD_CITY_NAME] ?? '',
-                    $prediction[EnderecoRpc::FIELD_ADDITIONAL_INFO] ?? '',
-                    $this->subdivisions->isoToName(
-                        $original->countryId(),
-                        $prediction[EnderecoRpc::FIELD_SUBDIVISION_CODE] ?? ''
-                    ),
+                    $this->predictionFields($prediction, $original->countryId()),
                     $showAddress3,
                     $showSubdivision
                 ));
@@ -227,24 +215,67 @@ final class OrderCommentWriter
      * Always shown first, framed by SEPARATOR on both sides, so a
      * correction/suggestion right after it reads as the comparison it is.
      *
+     * @param array{
+     *     address1: string, address2: string, postalCode: string,
+     *     town: string, address3: string, subdivisionName: string
+     * } $originalFields
      * @return list<string>
      */
-    private function originalAddressLines(AddressDto $original, bool $showAddress3, bool $showSubdivision): array
+    private function originalAddressLines(array $originalFields, bool $showAddress3, bool $showSubdivision): array
     {
         return [
             self::SEPARATOR,
             $this->trans(CommentKey::ORIGINAL_ADDRESS),
-            ...$this->addressLines(
-                $original->address1(),
-                $original->address2(),
-                $original->postalCode(),
-                $original->town(),
-                $original->address3(),
-                $this->subdivisions->plentyToName($original->countryId(), $original->stateId()),
-                $showAddress3,
-                $showSubdivision
-            ),
+            ...$this->addressLines($originalFields, $showAddress3, $showSubdivision),
             self::SEPARATOR,
+        ];
+    }
+
+    /**
+     * The six fields addressLines() renders for an address we already have
+     * as an AddressDto - the original or the suggestion, both carrying a
+     * resolved Plenty state id rather than a raw subdivision code.
+     *
+     * @return array{
+     *     address1: string, address2: string, postalCode: string,
+     *     town: string, address3: string, subdivisionName: string
+     * }
+     */
+    private function addressFields(AddressDto $address): array
+    {
+        return [
+            'address1' => $address->address1(),
+            'address2' => $address->address2(),
+            'postalCode' => $address->postalCode(),
+            'town' => $address->town(),
+            'address3' => $address->address3(),
+            'subdivisionName' => $this->subdivisions->plentyToName($address->countryId(), $address->stateId()),
+        ];
+    }
+
+    /**
+     * The six fields addressLines() renders for a raw prediction - the only
+     * source that still carries a subdivision as an ISO code rather than a
+     * resolved Plenty state id.
+     *
+     * @param array<string, string> $prediction
+     * @return array{
+     *     address1: string, address2: string, postalCode: string,
+     *     town: string, address3: string, subdivisionName: string
+     * }
+     */
+    private function predictionFields(array $prediction, int $countryId): array
+    {
+        return [
+            'address1' => $prediction[EnderecoRpc::FIELD_STREET] ?? '',
+            'address2' => $prediction[EnderecoRpc::FIELD_HOUSE_NUMBER] ?? '',
+            'postalCode' => $prediction[EnderecoRpc::FIELD_POST_CODE] ?? '',
+            'town' => $prediction[EnderecoRpc::FIELD_CITY_NAME] ?? '',
+            'address3' => $prediction[EnderecoRpc::FIELD_ADDITIONAL_INFO] ?? '',
+            'subdivisionName' => $this->subdivisions->isoToName(
+                $countryId,
+                $prediction[EnderecoRpc::FIELD_SUBDIVISION_CODE] ?? ''
+            ),
         ];
     }
 
@@ -254,32 +285,28 @@ final class OrderCommentWriter
      * shownFields() decided they're worth showing - address4 and country
      * are never shown, a check never corrects either.
      *
+     * @param array{
+     *     address1: string, address2: string, postalCode: string,
+     *     town: string, address3: string, subdivisionName: string
+     * } $fields
      * @return list<string>
      */
-    private function addressLines(
-        string $address1,
-        string $address2,
-        string $postalCode,
-        string $town,
-        string $address3,
-        string $subdivisionName,
-        bool $showAddress3,
-        bool $showSubdivision
-    ): array {
+    private function addressLines(array $fields, bool $showAddress3, bool $showSubdivision): array
+    {
         $lines = [
-            $this->fieldLine(CommentKey::STREET, $address1),
-            $this->fieldLine(CommentKey::HOUSE_NUMBER, $address2),
+            $this->fieldLine(CommentKey::STREET, $fields['address1']),
+            $this->fieldLine(CommentKey::HOUSE_NUMBER, $fields['address2']),
         ];
 
         if ($showAddress3) {
-            $lines[] = $this->fieldLine(CommentKey::ADDITIONAL_INFO, $address3);
+            $lines[] = $this->fieldLine(CommentKey::ADDITIONAL_INFO, $fields['address3']);
         }
 
-        $lines[] = $this->fieldLine(CommentKey::POSTAL_CODE, $postalCode);
-        $lines[] = $this->fieldLine(CommentKey::TOWN, $town);
+        $lines[] = $this->fieldLine(CommentKey::POSTAL_CODE, $fields['postalCode']);
+        $lines[] = $this->fieldLine(CommentKey::TOWN, $fields['town']);
 
         if ($showSubdivision) {
-            $lines[] = $this->fieldLine(CommentKey::SUBDIVISION, $subdivisionName);
+            $lines[] = $this->fieldLine(CommentKey::SUBDIVISION, $fields['subdivisionName']);
         }
 
         return $lines;
