@@ -19,6 +19,9 @@ final class CommentKey
     /** :number - one of several candidates, formatted on the lines after it. */
     public const SUGGESTION_NUMBERED = 'comment.suggestionNumbered';
 
+    /** Like SUGGESTION, but for a minor correction the plugin already applied. */
+    public const CORRECTION = 'comment.correction';
+
     public const NO_SUGGESTION = 'comment.noSuggestion';
 
     public const CORRECT = 'comment.correct';

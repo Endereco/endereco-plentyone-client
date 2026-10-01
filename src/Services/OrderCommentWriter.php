@@ -25,12 +25,6 @@ use Plenty\Modules\User\Contracts\UserRepositoryContract;
  */
 final class OrderCommentWriter
 {
-    /** One line, no further detail needed - see text(). */
-    private const ONE_LINE_CASES = [
-        TargetStatusCase::CORRECT => CommentKey::CORRECT,
-        TargetStatusCase::MINOR_CORRECTION => CommentKey::MINOR_CORRECTION,
-    ];
-
     /** More than this makes the comment unreadable rather than helpful. */
     private const MAX_LISTED_PREDICTIONS = 5;
 
@@ -133,25 +127,31 @@ final class OrderCommentWriter
         ?array $packstationFlags,
         AddressDto $original
     ): string {
-        $isOneLineCase = isset(self::ONE_LINE_CASES[$case]);
-
-        $lines = [
-            $isOneLineCase ? $this->trans(self::ONE_LINE_CASES[$case]) : $this->trans(CommentKey::HEADER),
-        ];
+        $lines = [$this->headerText($case)];
 
         if ($packstationFlags !== null) {
             $lines[] = $this->trans($packstationFlags[0] ? CommentKey::PACKSTATION : CommentKey::POSTFILIALE);
         }
 
-        if (! $isOneLineCase) {
-            array_push($lines, ...$this->detailLines($result, $original));
+        if ($case !== TargetStatusCase::CORRECT) {
+            array_push($lines, ...$this->detailLines($case, $result, $original));
         }
 
         return implode('<br>', $lines);
     }
 
+    /** Only CORRECT skips detail lines - every other case still needs its own header text. */
+    private function headerText(string $case): string
+    {
+        return match ($case) {
+            TargetStatusCase::CORRECT => $this->trans(CommentKey::CORRECT),
+            TargetStatusCase::MINOR_CORRECTION => $this->trans(CommentKey::MINOR_CORRECTION),
+            default => $this->trans(CommentKey::HEADER),
+        };
+    }
+
     /** @return list<string> */
-    private function detailLines(CheckResult $result, AddressDto $original): array
+    private function detailLines(string $case, CheckResult $result, AddressDto $original): array
     {
         $lines = [];
 
@@ -162,7 +162,9 @@ final class OrderCommentWriter
 
         if ($suggestion !== null) {
             array_push($lines, ...$this->originalAddressLines($original, $showAddress3, $showSubdivision));
-            $lines[] = $this->trans(CommentKey::SUGGESTION);
+            $lines[] = $this->trans(
+                $case === TargetStatusCase::MINOR_CORRECTION ? CommentKey::CORRECTION : CommentKey::SUGGESTION
+            );
             array_push($lines, ...$this->addressLines(
                 $suggestion->address1(),
                 $suggestion->address2(),
