@@ -63,7 +63,7 @@ final class CheckResultWriter
         $case = $this->targetStatusCase($result->finding(), $applied);
 
         if ($this->settings->writesComments()) {
-            $this->comments->write($orderId, $case, $result, $packstationFlags);
+            $this->comments->write($orderId, $case, $result, $packstationFlags, $original);
         }
 
         $target = $this->statusResolver->resolveTarget($orderId, $case);

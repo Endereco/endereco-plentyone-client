@@ -32,4 +32,21 @@ final class CommentKey
     public const BUILDING_NUMBER_MISSING = 'comment.buildingNumberMissing';
 
     public const BUILDING_NUMBER_NOT_FOUND = 'comment.buildingNumberNotFound';
+
+    // --- address field labels, one address line each: "label: value" ------
+
+    public const STREET = 'comment.fieldStreet';
+
+    public const HOUSE_NUMBER = 'comment.fieldHouseNumber';
+
+    public const ADDITIONAL_INFO = 'comment.fieldAdditionalInfo';
+
+    public const POSTAL_CODE = 'comment.fieldPostalCode';
+
+    public const TOWN = 'comment.fieldTown';
+
+    public const SUBDIVISION = 'comment.fieldSubdivision';
+
+    /** The value shown for a field the answer carried with no content. */
+    public const EMPTY_VALUE = 'comment.emptyValue';
 }
