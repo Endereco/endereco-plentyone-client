@@ -11,6 +11,8 @@ final class CommentKey
 {
     public const HEADER = 'comment.header';
 
+    public const ORIGINAL_ADDRESS = 'comment.originalAddress';
+
     /** Followed by the formatted candidate, on the lines after it. */
     public const SUGGESTION = 'comment.suggestion';
 

@@ -34,6 +34,9 @@ final class OrderCommentWriter
     /** More than this makes the comment unreadable rather than helpful. */
     private const MAX_LISTED_PREDICTIONS = 5;
 
+    /** Visually sets the original address apart from the correction/suggestion(s). */
+    private const SEPARATOR = '---';
+
     public function __construct(
         private CommentRepositoryContract $comments,
         private UserRepositoryContract $users,
@@ -158,6 +161,7 @@ final class OrderCommentWriter
         [$showAddress3, $showSubdivision] = $this->shownFields($original, $predictions);
 
         if ($suggestion !== null) {
+            array_push($lines, ...$this->originalAddressLines($original, $showAddress3, $showSubdivision));
             $lines[] = $this->trans(CommentKey::SUGGESTION);
             array_push($lines, ...$this->addressLines(
                 $suggestion->address1(),
@@ -170,8 +174,14 @@ final class OrderCommentWriter
                 $showSubdivision
             ));
         } elseif ($predictions !== []) {
+            array_push($lines, ...$this->originalAddressLines($original, $showAddress3, $showSubdivision));
+
             // Several candidates: suggestion() is null, list some instead.
             foreach (array_slice($predictions, 0, self::MAX_LISTED_PREDICTIONS) as $index => $prediction) {
+                if ($index > 0) {
+                    $lines[] = self::SEPARATOR;
+                }
+
                 $lines[] = $this->trans(
                     CommentKey::SUGGESTION_NUMBERED,
                     ['number' => (string) ($index + 1)]
@@ -189,7 +199,6 @@ final class OrderCommentWriter
                     $showAddress3,
                     $showSubdivision
                 ));
-                $lines[] = '';
             }
         } else {
             // No suggestion and no predictions at all - CheckFinding::NOT_FOUND.
@@ -213,49 +222,28 @@ final class OrderCommentWriter
     }
 
     /**
-     * Whether address3/subdivision appear at all - decided once per
-     * comment, the same for every address shown in it.
+     * Always shown first, framed by SEPARATOR on both sides, so a
+     * correction/suggestion right after it reads as the comparison it is.
      *
-     * @param list<array<string, string>> $predictions
-     * @return array{0: bool, 1: bool} address3, subdivision
+     * @return list<string>
      */
-    private function shownFields(AddressDto $original, array $predictions): array
+    private function originalAddressLines(AddressDto $original, bool $showAddress3, bool $showSubdivision): array
     {
         return [
-            $this->fieldShown($predictions, EnderecoRpc::FIELD_ADDITIONAL_INFO, $original->address3() !== ''),
-            $this->fieldShown($predictions, EnderecoRpc::FIELD_SUBDIVISION_CODE, $original->stateId() !== null),
+            self::SEPARATOR,
+            $this->trans(CommentKey::ORIGINAL_ADDRESS),
+            ...$this->addressLines(
+                $original->address1(),
+                $original->address2(),
+                $original->postalCode(),
+                $original->town(),
+                $original->address3(),
+                $this->subdivisions->plentyToName($original->countryId(), $original->stateId()),
+                $showAddress3,
+                $showSubdivision
+            ),
+            self::SEPARATOR,
         ];
-    }
-
-    /**
-     * False when the answer never mentions the field, or when neither the
-     * original nor any of the first five candidates has a value for it.
-     *
-     * @param list<array<string, string>> $predictions
-     */
-    private function fieldShown(array $predictions, string $key, bool $originalHasValue): bool
-    {
-        $present = false;
-
-        foreach ($predictions as $prediction) {
-            $present = $present || array_key_exists($key, $prediction);
-        }
-
-        if (! $present) {
-            return false;
-        }
-
-        if ($originalHasValue) {
-            return true;
-        }
-
-        foreach (array_slice($predictions, 0, self::MAX_LISTED_PREDICTIONS) as $prediction) {
-            if (($prediction[$key] ?? '') !== '') {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     /**
@@ -304,5 +292,51 @@ final class OrderCommentWriter
         $display = $value !== '' ? $value : $this->trans(CommentKey::EMPTY_VALUE);
 
         return $this->trans($labelKey) . ' ' . $display;
+    }
+
+    /**
+     * Whether address3/subdivision appear at all - decided once per
+     * comment, the same for every address shown in it.
+     *
+     * @param list<array<string, string>> $predictions
+     * @return array{0: bool, 1: bool} address3, subdivision
+     */
+    private function shownFields(AddressDto $original, array $predictions): array
+    {
+        return [
+            $this->fieldShown($predictions, EnderecoRpc::FIELD_ADDITIONAL_INFO, $original->address3() !== ''),
+            $this->fieldShown($predictions, EnderecoRpc::FIELD_SUBDIVISION_CODE, $original->stateId() !== null),
+        ];
+    }
+
+    /**
+     * False when the answer never mentions the field, or when neither the
+     * original nor any of the first five candidates has a value for it.
+     *
+     * @param list<array<string, string>> $predictions
+     */
+    private function fieldShown(array $predictions, string $key, bool $originalHasValue): bool
+    {
+        $present = false;
+
+        foreach ($predictions as $prediction) {
+            $present = $present || array_key_exists($key, $prediction);
+        }
+
+        if (! $present) {
+            return false;
+        }
+
+        if ($originalHasValue) {
+            return true;
+        }
+
+        foreach (array_slice($predictions, 0, self::MAX_LISTED_PREDICTIONS) as $prediction) {
+            if (($prediction[$key] ?? '') !== '') {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
