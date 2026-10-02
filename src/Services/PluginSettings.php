@@ -104,7 +104,7 @@ final class PluginSettings
      */
     public function startStatus(): float
     {
-        $value = (float) $this->text(SettingKey::START_STATUS, OrderStatus::HOLD);
+        $value = $this->decimal(SettingKey::START_STATUS, OrderStatus::HOLD);
 
         return $value > 0.0 ? $value : (float) OrderStatus::HOLD;
     }
@@ -131,7 +131,7 @@ final class PluginSettings
             TargetStatusCase::NOT_FOUND => SettingKey::TARGET_STATUS_NOT_FOUND,
         };
 
-        $value = (float) $this->text($key, '0');
+        $value = $this->decimal($key, '0');
 
         return $value === 0.0 ? null : $value;
     }
@@ -161,5 +161,13 @@ final class PluginSettings
         );
 
         return is_string($value) ? $value : $default;
+    }
+
+    /** Normalises a decimal comma to a dot and strips everything else but digits and dots. */
+    private function decimal(string $key, string $default): float
+    {
+        $sanitized = preg_replace('/[^0-9.]/', '', str_replace(',', '.', $this->text($key, $default))) ?? '';
+
+        return (float) $sanitized;
     }
 }
