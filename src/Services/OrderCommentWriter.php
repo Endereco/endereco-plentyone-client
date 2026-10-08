@@ -345,13 +345,19 @@ final class OrderCommentWriter
      */
     private function fieldLine(string $labelKey, string $value, ?string $originalValue = null): string
     {
-        $display = $value !== '' ? $value : $this->trans(CommentKey::EMPTY_VALUE);
+        $display = $value !== '' ? $this->escape($value) : $this->trans(CommentKey::EMPTY_VALUE);
 
         if ($originalValue !== null && $value !== $originalValue) {
             $display = '<b><u>' . $display . '</u></b>';
         }
 
         return $this->trans($labelKey) . ' ' . $display;
+    }
+
+    /** Prevents XSS from a value out of the order's address or the API's answer, rendered as HTML in the comment. */
+    private function escape(string $value): string
+    {
+        return htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
     }
 
     /**
