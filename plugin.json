@@ -17,6 +17,7 @@
     "author"            :   "endereco UG (haftungsbeschränkt)",
     "authorIcon"        :   "icon_author_xs.png",
     "license"           :   "AGPL-3.0-or-later",
+    "platform"          :   {"php": ">=8.0"},
     "keywords"          :   [
         "address",
         "validation",
