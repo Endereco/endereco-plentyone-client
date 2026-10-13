@@ -59,7 +59,6 @@ curl_setopt_array($curl, [
 $body = curl_exec($curl);
 $transportError = (string) curl_error($curl);
 $answer['httpCode'] = (string) curl_getinfo($curl, CURLINFO_HTTP_CODE);
-curl_close($curl);
 
 if ($transportError !== '') {
     $answer['transportError'] = $transportError;
