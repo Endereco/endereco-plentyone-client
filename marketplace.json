@@ -1,0 +1,25 @@
+{
+    "marketplaceName": {
+        "de": "Adressprüfung & Adresskorrektur von endereco",
+        "en": "Address Validation from endereco"
+    },
+    "shortDescription": {
+        "de": "Das Plugin prüft weltweit Lieferadressen neuer Aufträge auf Adressfehler, korrigiert eindeutige Adressfehler automatisch und markiert Aufträge mit fehlerhaften Adressen per Tag und Kommentar",
+        "en": "The plugin checks delivery addresses of new orders worldwide for address errors, automatically corrects unambiguous address errors, and tags orders with incorrect addresses using a tag and a comment"
+    },
+    "price": 0.00,
+    "categories": ["4080"],
+    "keywords": [
+        "endereco",
+        "Adressprüfung",
+        "Adresscheck",
+        "Adressvalidierung",
+        "address validation",
+        "addressvalidation",
+        "address check",
+        "Packstation",
+        "Postfiliale",
+        "Lieferadresse",
+        "delivery address"
+    ]
+}
