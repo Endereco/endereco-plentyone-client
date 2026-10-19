@@ -18,9 +18,11 @@
         "lint": "find src resources/lib -name '*.php' -print0 | xargs -0 -n1 php -l",
         "cs": "phpcs",
         "cs-fix": "phpcbf",
+        "version-check": "php dev-tools/check-version.php",
         "qa": [
             "@lint",
-            "@cs"
+            "@cs",
+            "@version-check"
         ]
     }
 }
