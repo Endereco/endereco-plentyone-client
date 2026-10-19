@@ -35,6 +35,13 @@ The result lands directly on the order: as tags, as order properties
 plain-text comment. See the [user guide](meta/documents/user_guide_de.md)
 for details.
 
+## Installation via GitHub
+
+Until the plugin is available on the PlentyONE Marketplace, it can be
+installed straight from this repository. A step-by-step guide with
+screenshots (German) is in
+[docs/github_installation_de.md](docs/github_installation_de.md).
+
 ## Billing
 
 Billing is per API call, not session-based. A session ID still
