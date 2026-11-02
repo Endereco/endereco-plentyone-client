@@ -1,3 +1,5 @@
 /reference/
 /dev-tools/.env
 /vendor/
+/.idea/
+/.vscode/
