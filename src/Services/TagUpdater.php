@@ -11,7 +11,7 @@ use EnderecoPlentyOneClient\Enums\OrderTag;
  * Swaps the tags of an order to match the outcome of a check.
  *
  * Removes every tag belonging to any OTHER outcome, not just adds the
- * current ones. "Address validation pending" is always removed too - it is
+ * current ones. The pending tag is always removed too - it is
  * set at enqueue time (see OrderQueueService) and nothing else takes it off.
  */
 final class TagUpdater
