@@ -136,7 +136,7 @@ Es gibt zwei Wege, wie ein Auftrag in die Warteschlange des Plugins gelangt:
 
 In beiden Fällen passiert dasselbe: das Plugin merkt den Auftrag vor, hält ihn
 auf dem konfigurierten Start-Status an (Standard: *3.2 | In Warteposition*)
-und setzt das Tag **Address validation pending**. Ein Auftrag, an dem gerade
+und setzt das Tag **Pending address validation**. Ein Auftrag, an dem gerade
 schon eine Prüfung läuft, wird dabei nicht ein zweites Mal vorgemerkt,
 unabhängig davon, wodurch die Vormerkung ausgelöst wurde.
 
@@ -168,7 +168,7 @@ davon, wie er in die Warteschlange kam:
 | Eindeutige Korrektur, übernommen | **Address valid** + **Address corrected** | korrigiert | vorheriger Status |
 | Korrektur vorhanden, nicht übernommen (Haken nicht gesetzt, Korrektur nicht eindeutig genug, oder mehrere mögliche Adressen gefunden) | **Address has issues** | unverändert | vorheriger Status |
 | Keine sinnvolle Korrektur möglich | **Address has issues** | unverändert | vorheriger Status |
-| Adressprüfung gescheitert, alle Versuche verbraucht | **Address validation failed** | unverändert | vorheriger Status |
+| Adressprüfung gescheitert, alle Versuche verbraucht | **Failed address validation** | unverändert | vorheriger Status |
 
 > **Hinweis:** Tags werden in PlentyONE unabhängig von der Sprache des
 > Backends immer in englisch angezeigt, obwohl das Plugin auch deutsche
@@ -324,7 +324,7 @@ nicht gefunden zählen alle gleich). Versuche, die nicht durchkommen –
 falscher API-Schlüssel, Zeitüberschreitung – kosten nichts, auch nicht
 beim wiederholten Versuch.
 Ein Auftrag, bei dem die Prüfung nach 3 Versuchen aufgegeben wird
-(**Address validation failed**), wurde also gar nicht abgerechnet.
+(**Failed address validation**), wurde also gar nicht abgerechnet.
 
 Die aktuellen Preise findest du unter [endereco.de/preise](https://www.endereco.de/preise/).
 

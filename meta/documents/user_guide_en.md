@@ -130,7 +130,7 @@ There are two ways an order enters the plugin's queue:
 
 Either way, the same thing happens: the plugin queues the order, holds
 it on the configured start status (default: *3.2 | On hold*), and adds
-the **Address validation pending** tag. An order that already has a
+the **Pending address validation** tag. An order that already has a
 check in progress is not queued a second time, regardless of what
 triggered the queueing.
 
@@ -162,7 +162,7 @@ how it got into the queue:
 | Unambiguous correction, applied | **Address valid** + **Address corrected** | corrected | previous status |
 | Correction exists, not applied (checkbox off, correction not unambiguous enough, or several possible addresses found) | **Address has issues** | unchanged | previous status |
 | No meaningful correction possible | **Address has issues** | unchanged | previous status |
-| Address check given up, all attempts used | **Address validation failed** | unchanged | previous status |
+| Address check given up, all attempts used | **Failed address validation** | unchanged | previous status |
 
 > **Note:** PlentyONE always displays tags in English regardless of the
 > backend's language, even though the plugin also ships German
@@ -316,7 +316,7 @@ the answer says (correct, correctable, ambiguous, and not found all
 count the same). Attempts that don't go through - wrong API key,
 timeout - cost nothing, not even on a retry.
 An order for which the check is given up after 3 attempts
-(**Address validation failed**) was therefore never billed at all.
+(**Failed address validation**) was therefore never billed at all.
 
 Current prices are listed at [endereco.de/preise](https://www.endereco.de/preise/).
 
