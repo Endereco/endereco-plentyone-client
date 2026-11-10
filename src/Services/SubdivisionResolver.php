@@ -59,27 +59,6 @@ final class SubdivisionResolver
         return '';
     }
 
-    /** The PlentyONE state id an ISO 3166-2 code matches, or null when it doesn't. */
-    public function isoToPlenty(int $countryId, string $code): ?int
-    {
-        $shortCode = substr($code, self::PREFIX_LENGTH);
-
-        if ($shortCode === '') {
-            return null;
-        }
-
-        try {
-            $state = $this->countries->getCountryStateByIso(
-                $countryId,
-                $shortCode
-            );
-        } catch (\Throwable) {
-            return null;
-        }
-
-        return $state->id;
-    }
-
     /** The state's display name for a PlentyONE state id, or '' when it doesn't match. */
     public function plentyToName(int $countryId, ?int $stateId): string
     {
@@ -96,25 +75,16 @@ final class SubdivisionResolver
         return '';
     }
 
+    /** The PlentyONE state id an ISO 3166-2 code matches, or null when it doesn't. */
+    public function isoToPlenty(int $countryId, string $code): ?int
+    {
+        return $this->stateByIso($countryId, $code)?->id;
+    }
+
     /** The state's display name for an ISO 3166-2 code, or '' when it doesn't match. */
     public function isoToName(int $countryId, string $code): string
     {
-        $shortCode = substr($code, self::PREFIX_LENGTH);
-
-        if ($shortCode === '') {
-            return '';
-        }
-
-        try {
-            $state = $this->countries->getCountryStateByIso(
-                $countryId,
-                $shortCode
-            );
-        } catch (\Throwable) {
-            return '';
-        }
-
-        return $state->name;
+        return $this->stateByIso($countryId, $code)?->name ?? '';
     }
 
     /**
@@ -138,5 +108,21 @@ final class SubdivisionResolver
         }
 
         return $states;
+    }
+
+    /** The state an ISO 3166-2 code matches in this country, or null when none does. */
+    private function stateByIso(int $countryId, string $code): ?object
+    {
+        $shortCode = substr($code, self::PREFIX_LENGTH);
+
+        if ($shortCode === '') {
+            return null;
+        }
+
+        try {
+            return $this->countries->getCountryStateByIso($countryId, $shortCode);
+        } catch (\Throwable) {
+            return null;
+        }
     }
 }
