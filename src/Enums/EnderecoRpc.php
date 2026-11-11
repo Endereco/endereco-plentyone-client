@@ -28,7 +28,7 @@ final class EnderecoRpc
     public const DEFAULT_ENDPOINT = 'https://endereco-service.de/rpc/v1';
 
     /** Identifies the caller in the service's logs. */
-    public const AGENT = 'Endereco PlentyONE Client v1.0.0';
+    public const AGENT = 'Endereco PlentyONE Client v1.0.1';
 
     // --- parameters of the library call -----------------------------------
 
