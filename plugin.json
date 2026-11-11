@@ -6,7 +6,7 @@
     },
     "namespace"         :   "EnderecoPlentyOneClient",
     "type"              :   "integration",
-    "version"           :   "1.0.0",
+    "version"           :   "1.0.1",
     "pluginIcon"        :   "icon_plugin_xs.png",
     "shortDescription"  :   {
         "de": "Internationale Adressprüfung für Auftragsadressen",
